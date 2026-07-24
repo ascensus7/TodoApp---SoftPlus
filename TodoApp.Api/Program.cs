@@ -5,6 +5,8 @@ using TodoApp.DataAccess;
 using TodoApp.Services;
 using TodoApp.Api.Middleware;
 
+const string AngularCorsPolicy = "AngularClient";
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -15,6 +17,20 @@ builder.Services.AddOpenApi();
 builder.Services.AddDataAccess(builder.Configuration);
 builder.Services.AddServices();
 
+var allowedOrigins = builder.Configuration
+    .GetSection("AllowedOrigins")
+    .Get<string[]>() ?? [];
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(AngularCorsPolicy, policy =>
+    {
+        policy
+            .WithOrigins(allowedOrigins)
+            .AllowAnyHeader()
+            .AllowAnyMethod();
+    });
+});
 
 var jwtKey = builder.Configuration["Jwt:Key"]
     ?? throw new InvalidOperationException(
@@ -62,6 +78,8 @@ if (app.Environment.IsDevelopment())
 app.UseMiddleware<ExceptionHandlingMiddleware>();
 
 app.UseHttpsRedirection();
+
+app.UseCors(AngularCorsPolicy);
 
 app.UseAuthentication();
 app.UseAuthorization();

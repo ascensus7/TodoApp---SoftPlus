@@ -1,0 +1,227 @@
+<div class="container py-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+      <h1 class="mb-1">My tasks</h1>
+
+      <p class="text-muted mb-0">
+        Total tasks: {{ totalCount }}
+      </p>
+    </div>
+
+    <a routerLink="/tasks/new" class="btn btn-primary">
+      Add task
+    </a>
+  </div>
+
+  <div class="card shadow-sm mb-4">
+    <div class="card-body">
+      <div class="row g-3">
+        <div class="col-md-4">
+          <label for="search" class="form-label">
+            Search
+          </label>
+
+          <input
+            id="search"
+            type="text"
+            class="form-control"
+            placeholder="Title or description"
+            maxlength="100"
+            [(ngModel)]="search"
+            (keyup.enter)="applyFilters()"
+          >
+        </div>
+
+        <div class="col-md-3">
+          <label for="category" class="form-label">
+            Category
+          </label>
+
+          <select
+            id="category"
+            class="form-select"
+            [(ngModel)]="selectedCategoryId"
+          >
+            <option [ngValue]="null">
+              All categories
+            </option>
+
+            <option
+              *ngFor="let category of categories"
+              [ngValue]="category.id"
+            >
+              {{ category.name }}
+            </option>
+          </select>
+        </div>
+
+        <div class="col-md-3">
+          <label for="completion" class="form-label">
+            Status
+          </label>
+
+          <select
+            id="completion"
+            class="form-select"
+            [(ngModel)]="selectedCompletion"
+          >
+            <option value="">All tasks</option>
+            <option value="false">Active</option>
+            <option value="true">Completed</option>
+          </select>
+        </div>
+
+        <div class="col-md-2 d-flex align-items-end">
+          <button
+            type="button"
+            class="btn btn-primary w-100"
+            (click)="applyFilters()"
+          >
+            Apply
+          </button>
+        </div>
+      </div>
+
+      <button
+        type="button"
+        class="btn btn-link px-0 mt-2"
+        (click)="clearFilters()"
+      >
+        Clear filters
+      </button>
+    </div>
+  </div>
+
+  <div
+    *ngIf="errorMessage !== ''"
+    class="alert alert-danger"
+  >
+    {{ errorMessage }}
+  </div>
+
+  <div
+    *ngIf="isLoading"
+    class="text-center py-5"
+  >
+    <div class="spinner-border text-primary"></div>
+    <p class="mt-2">Loading tasks...</p>
+  </div>
+
+  <div
+    *ngIf="
+      isLoading === false &&
+      tasks.length === 0 &&
+      errorMessage === ''
+    "
+    class="alert alert-light text-center border"
+  >
+    No tasks found.
+  </div>
+
+  <div
+    *ngIf="isLoading === false"
+    class="row g-3"
+  >
+    <div
+      *ngFor="let task of tasks"
+      class="col-12"
+    >
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <div class="d-flex justify-content-between gap-3">
+            <div>
+              <h5
+                class="card-title"
+                [class.text-decoration-line-through]="task.isCompleted"
+                [class.text-muted]="task.isCompleted"
+              >
+                {{ task.title }}
+              </h5>
+
+              <p
+                *ngIf="task.description !== null"
+                class="card-text"
+              >
+                {{ task.description }}
+              </p>
+
+              <span
+                *ngIf="task.categoryName !== null"
+                class="badge text-bg-secondary me-2"
+              >
+                {{ task.categoryName }}
+              </span>
+
+              <span
+                *ngIf="task.isCompleted"
+                class="badge text-bg-success"
+              >
+                Completed
+              </span>
+
+              <span
+                *ngIf="task.isCompleted === false"
+                class="badge text-bg-warning"
+              >
+                Active
+              </span>
+            </div>
+
+            <div class="d-flex gap-2 align-self-start">
+              <a
+                [routerLink]="['/tasks', task.id, 'edit']"
+                class="btn btn-outline-primary btn-sm"
+              >
+                Edit
+              </a>
+
+              <button
+                type="button"
+                class="btn btn-outline-danger btn-sm"
+                (click)="deleteTask(task)"
+              >
+                Delete
+              </button>
+            </div>
+          </div>
+
+          <div
+            *ngIf="task.dueDate !== null"
+            class="text-muted mt-3"
+          >
+            Due: {{ task.dueDate | date:'mediumDate' }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <nav
+    *ngIf="totalPages > 1"
+    class="mt-4"
+  >
+    <div class="d-flex justify-content-center align-items-center gap-3">
+      <button
+        type="button"
+        class="btn btn-outline-secondary"
+        [disabled]="pageNumber <= 1"
+        (click)="previousPage()"
+      >
+        Previous
+      </button>
+
+      <span>
+        Page {{ pageNumber }} of {{ totalPages }}
+      </span>
+
+      <button
+        type="button"
+        class="btn btn-outline-secondary"
+        [disabled]="pageNumber >= totalPages"
+        (click)="nextPage()"
+      >
+        Next
+      </button>
+    </div>
+  </nav>
+</div>

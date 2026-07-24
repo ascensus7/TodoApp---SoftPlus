@@ -1,0 +1,97 @@
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-6 col-lg-4">
+      <div class="card shadow-sm">
+        <div class="card-body p-4">
+          <h2 class="text-center mb-4">Login</h2>
+
+          <div
+            *ngIf="errorMessage !== ''"
+            class="alert alert-danger"
+          >
+            {{ errorMessage }}
+          </div>
+
+          <form
+            [formGroup]="loginForm"
+            (ngSubmit)="login()"
+          >
+            <div class="mb-3">
+              <label
+                for="email"
+                class="form-label"
+              >
+                Email
+              </label>
+
+              <input
+                id="email"
+                type="email"
+                class="form-control"
+                formControlName="email"
+              >
+
+              <div
+                *ngIf="
+                  loginForm.controls.email.touched &&
+                  loginForm.controls.email.invalid
+                "
+                class="text-danger mt-1"
+              >
+                Enter a valid email address.
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label
+                for="password"
+                class="form-label"
+              >
+                Password
+              </label>
+
+              <input
+                id="password"
+                type="password"
+                class="form-control"
+                formControlName="password"
+              >
+
+              <div
+                *ngIf="
+                  loginForm.controls.password.touched &&
+                  loginForm.controls.password.invalid
+                "
+                class="text-danger mt-1"
+              >
+                Password is required.
+              </div>
+            </div>
+
+            <button
+              type="submit"
+              class="btn btn-primary w-100"
+              [disabled]="isLoading"
+            >
+              <span *ngIf="isLoading">
+                Logging in...
+              </span>
+
+              <span *ngIf="isLoading === false">
+                Login
+              </span>
+            </button>
+          </form>
+
+          <p class="text-center mt-3 mb-0">
+            Don't have an account?
+
+            <a routerLink="/register">
+              Register
+            </a>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

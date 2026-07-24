@@ -1,0 +1,115 @@
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-6 col-lg-4">
+      <div class="card shadow-sm">
+        <div class="card-body p-4">
+          <h2 class="text-center mb-4">
+            Register
+          </h2>
+
+          <div
+            *ngIf="errorMessage !== ''"
+            class="alert alert-danger"
+          >
+            {{ errorMessage }}
+          </div>
+
+          <form
+            [formGroup]="registerForm"
+            (ngSubmit)="register()"
+          >
+            <div class="mb-3">
+              <label
+                for="email"
+                class="form-label"
+              >
+                Email
+              </label>
+
+              <input
+                id="email"
+                type="email"
+                class="form-control"
+                formControlName="email"
+              >
+
+              <div
+                *ngIf="
+                  registerForm.controls.email.touched &&
+                  registerForm.controls.email.invalid
+                "
+                class="text-danger mt-1"
+              >
+                Enter a valid email address.
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label
+                for="password"
+                class="form-label"
+              >
+                Password
+              </label>
+
+              <input
+                id="password"
+                type="password"
+                class="form-control"
+                formControlName="password"
+              >
+
+              <div
+                *ngIf="
+                  registerForm.controls.password.touched &&
+                  registerForm.controls.password.invalid
+                "
+                class="text-danger mt-1"
+              >
+                Password must contain at least 6 characters.
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label
+                for="confirmPassword"
+                class="form-label"
+              >
+                Confirm password
+              </label>
+
+              <input
+                id="confirmPassword"
+                type="password"
+                class="form-control"
+                formControlName="confirmPassword"
+              >
+            </div>
+
+            <button
+              type="submit"
+              class="btn btn-primary w-100"
+              [disabled]="isLoading"
+            >
+              <span *ngIf="isLoading">
+                Creating account...
+              </span>
+
+              <span *ngIf="isLoading === false">
+                Register
+              </span>
+            </button>
+          </form>
+
+          <p class="text-center mt-3 mb-0">
+            Already have an account?
+
+            <a routerLink="/login">
+              Login
+            </a>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

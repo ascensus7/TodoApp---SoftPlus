@@ -1,0 +1,120 @@
+<div class="container py-4">
+  <div class="row justify-content-center">
+    <div class="col-lg-8">
+      <h1 class="mb-4">Categories</h1>
+
+      <div
+        *ngIf="errorMessage !== ''"
+        class="alert alert-danger"
+      >
+        {{ errorMessage }}
+      </div>
+
+      <form
+        [formGroup]="categoryForm"
+        (ngSubmit)="save()"
+        class="card shadow-sm mb-4"
+      >
+        <div class="card-body">
+          <label
+            for="categoryName"
+            class="form-label"
+          >
+            {{
+              editingCategoryId === null
+                ? 'New category'
+                : 'Edit category'
+            }}
+          </label>
+
+          <div class="input-group">
+            <input
+              id="categoryName"
+              type="text"
+              class="form-control"
+              formControlName="name"
+              maxlength="100"
+              placeholder="Category name"
+              [class.is-invalid]="
+                categoryForm.controls.name.invalid &&
+                categoryForm.controls.name.touched
+              "
+            >
+
+            <button
+              type="submit"
+              class="btn btn-primary"
+              [disabled]="isSaving"
+            >
+              {{ editingCategoryId === null ? 'Add' : 'Save' }}
+            </button>
+
+            <button
+              *ngIf="editingCategoryId !== null"
+              type="button"
+              class="btn btn-outline-secondary"
+              (click)="cancelEditing()"
+            >
+              Cancel
+            </button>
+          </div>
+
+          <div
+            *ngIf="
+              categoryForm.controls.name.invalid &&
+              categoryForm.controls.name.touched
+            "
+            class="text-danger mt-1"
+          >
+            Name is required and must not exceed 100 characters.
+          </div>
+        </div>
+      </form>
+
+      <div
+        *ngIf="isLoading"
+        class="text-center py-5"
+      >
+        <div class="spinner-border text-primary"></div>
+        <p class="mt-2">Loading categories...</p>
+      </div>
+
+      <div
+        *ngIf="isLoading === false && categories.length === 0"
+        class="alert alert-light text-center border"
+      >
+        You have no categories yet.
+      </div>
+
+      <div
+        *ngIf="isLoading === false && categories.length > 0"
+        class="list-group shadow-sm"
+      >
+        <div
+          *ngFor="let category of categories"
+          class="list-group-item d-flex justify-content-between align-items-center"
+        >
+          <span>{{ category.name }}</span>
+
+          <div class="d-flex gap-2">
+            <button
+              type="button"
+              class="btn btn-outline-primary btn-sm"
+              (click)="startEditing(category)"
+            >
+              Edit
+            </button>
+
+            <button
+              type="button"
+              class="btn btn-outline-danger btn-sm"
+              (click)="deleteCategory(category)"
+            >
+              Delete
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

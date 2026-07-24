@@ -1,0 +1,57 @@
+<nav class="navbar navbar-expand bg-primary navbar-dark shadow-sm">
+  <div class="container">
+    <a class="navbar-brand fw-semibold" routerLink="/tasks">
+      <i class="bi bi-check2-circle me-2"></i>
+      Todo App
+    </a>
+
+    <div class="navbar-nav ms-auto flex-row gap-2">
+      <a
+        *ngIf="isAuthenticated()"
+        class="nav-link"
+        routerLink="/tasks"
+        routerLinkActive="active"
+      >
+        Tasks
+      </a>
+
+      <a
+        *ngIf="isAuthenticated()"
+        class="nav-link"
+        routerLink="/categories"
+        routerLinkActive="active"
+      >
+        Categories
+      </a>
+
+      <a
+        *ngIf="isAuthenticated() === false"
+        class="nav-link"
+        routerLink="/login"
+        routerLinkActive="active"
+      >
+        Login
+      </a>
+
+      <a
+        *ngIf="isAuthenticated() === false"
+        class="nav-link"
+        routerLink="/register"
+        routerLinkActive="active"
+      >
+        Register
+      </a>
+
+      <button
+        *ngIf="isAuthenticated()"
+        type="button"
+        class="btn btn-link nav-link border-0"
+        (click)="logout()"
+      >
+        Logout
+      </button>
+    </div>
+  </div>
+</nav>
+
+<router-outlet></router-outlet>

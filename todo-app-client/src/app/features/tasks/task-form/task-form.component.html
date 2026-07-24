@@ -1,0 +1,167 @@
+<div class="container py-4">
+  <div class="row justify-content-center">
+    <div class="col-lg-7">
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="mb-0">
+          {{ isEditMode ? 'Edit task' : 'Add task' }}
+        </h1>
+
+        <a
+          routerLink="/tasks"
+          class="btn btn-outline-secondary"
+        >
+          Back
+        </a>
+      </div>
+
+      <div
+        *ngIf="errorMessage !== ''"
+        class="alert alert-danger"
+      >
+        {{ errorMessage }}
+      </div>
+
+      <div
+        *ngIf="isLoading"
+        class="text-center py-5"
+      >
+        <div class="spinner-border text-primary"></div>
+        <p class="mt-2 mb-0">Loading task...</p>
+      </div>
+
+      <form
+        *ngIf="isLoading === false"
+        [formGroup]="taskForm"
+        (ngSubmit)="save()"
+        class="card shadow-sm"
+      >
+        <div class="card-body">
+          <div class="mb-3">
+            <label for="title" class="form-label">
+              Title
+            </label>
+
+            <input
+              id="title"
+              type="text"
+              class="form-control"
+              formControlName="title"
+              maxlength="100"
+              [class.is-invalid]="
+                taskForm.controls.title.invalid &&
+                taskForm.controls.title.touched
+              "
+            >
+
+            <div class="invalid-feedback">
+              Title is required and must not exceed 100 characters.
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label for="description" class="form-label">
+              Description
+            </label>
+
+            <textarea
+              id="description"
+              class="form-control"
+              formControlName="description"
+              maxlength="250"
+              rows="5"
+            ></textarea>
+
+            <div class="form-text">
+              Maximum 250 characters.
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label for="category" class="form-label">
+              Category
+            </label>
+
+            <select
+              id="category"
+              class="form-select"
+              formControlName="categoryId"
+            >
+              <option [ngValue]="null">
+                No category
+              </option>
+
+              <option
+                *ngFor="let category of categories"
+                [ngValue]="category.id"
+              >
+                {{ category.name }}
+              </option>
+            </select>
+
+            <div
+              *ngIf="categories.length === 0"
+              class="form-text"
+            >
+              You have no categories yet. The task can be created without one.
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label for="dueDate" class="form-label">
+              Due date
+            </label>
+
+            <input
+              id="dueDate"
+              type="datetime-local"
+              class="form-control"
+              formControlName="dueDate"
+            >
+          </div>
+
+          <div
+            *ngIf="isEditMode"
+            class="form-check mb-3"
+          >
+            <input
+              id="isCompleted"
+              type="checkbox"
+              class="form-check-input"
+              formControlName="isCompleted"
+            >
+
+            <label
+              for="isCompleted"
+              class="form-check-label"
+            >
+              Completed
+            </label>
+          </div>
+        </div>
+
+        <div class="card-footer d-flex justify-content-end gap-2">
+          <a
+            routerLink="/tasks"
+            class="btn btn-outline-secondary"
+          >
+            Cancel
+          </a>
+
+          <button
+            type="submit"
+            class="btn btn-primary"
+            [disabled]="isSaving"
+          >
+            <span *ngIf="isSaving">
+              Saving...
+            </span>
+
+            <span *ngIf="isSaving === false">
+              {{ isEditMode ? 'Save changes' : 'Create task' }}
+            </span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
