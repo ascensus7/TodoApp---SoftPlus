@@ -1,6 +1,139 @@
-@TodoApp.Api_HostAddress = http://localhost:5021
+@TodoApp.Api_HostAddress = https://localhost:7164
+@token = PASTE_JWT_HERE
+### Register
 
-GET {{TodoApp.Api_HostAddress}}/weatherforecast/
-Accept: application/json
+POST {{TodoApp.Api_HostAddress}}/api/auth/register
+Content-Type: application/json
 
-###
+{
+  "email": "test@example.com",
+  "password": "test123"
+}
+
+### Login
+
+POST {{TodoApp.Api_HostAddress}}/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "test@example.com",
+  "password": "test123"
+}
+
+### Create category
+
+POST {{TodoApp.Api_HostAddress}}/api/categories
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "name": "Work"
+}
+
+
+### Get all categories
+
+GET {{TodoApp.Api_HostAddress}}/api/categories
+Authorization: Bearer {{token}}
+
+
+### Get category by ID
+
+GET {{TodoApp.Api_HostAddress}}/api/categories/1
+Authorization: Bearer {{token}}
+
+
+### Update category
+
+PUT {{TodoApp.Api_HostAddress}}/api/categories/1
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "name": "University"
+}
+
+
+### Delete category
+
+DELETE {{TodoApp.Api_HostAddress}}/api/categories/2
+Authorization: Bearer {{token}}
+
+
+
+
+
+
+
+
+
+
+### Create todo item
+
+POST {{TodoApp.Api_HostAddress}}/api/todo-items
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "title": "Finish Todo application",
+  "description": "Complete and test the backend",
+  "dueDate": "2026-07-25T18:00:00Z",
+  "categoryId": 3
+}
+
+
+### Get paginated todo items
+
+GET {{TodoApp.Api_HostAddress}}/api/todo-items?pageNumber=1&pageSize=10
+Authorization: Bearer {{token}}
+
+
+### Search todo items
+
+GET {{TodoApp.Api_HostAddress}}/api/todo-items?search=application
+Authorization: Bearer {{token}}
+
+
+### Filter todo items by category
+
+GET {{TodoApp.Api_HostAddress}}/api/todo-items?categoryId=1
+Authorization: Bearer {{token}}
+
+
+### Filter incomplete todo items
+
+GET {{TodoApp.Api_HostAddress}}/api/todo-items?isCompleted=false
+Authorization: Bearer {{token}}
+
+
+### Search, filter and paginate todo items
+
+GET {{TodoApp.Api_HostAddress}}/api/todo-items?pageNumber=1&pageSize=5&search=application&categoryId=1&isCompleted=false
+Authorization: Bearer {{token}}
+
+
+### Get todo item by ID
+
+GET {{TodoApp.Api_HostAddress}}/api/todo-items/1
+Authorization: Bearer {{token}}
+
+
+### Update todo item
+
+PUT {{TodoApp.Api_HostAddress}}/api/todo-items/1
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "title": "Finish Todo application",
+  "description": "Backend is completed",
+  "isCompleted": true,
+  "dueDate": "2026-07-25T18:00:00Z",
+  "categoryId": 3
+}
+
+
+### Delete todo item
+
+DELETE {{TodoApp.Api_HostAddress}}/api/todo-items/1
+Authorization: Bearer {{token}}
