@@ -14,6 +14,7 @@ namespace TodoApp.Services
             services.AddScoped<IAuthService, AuthService>();
 
             services.AddScoped<ICategoryService, CategoryService>();
+            services.AddScoped<ITodoItemService, TodoItemService>();
 
             return services;
         }
